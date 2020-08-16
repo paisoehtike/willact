@@ -1,26 +1,59 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class Item extends React.Component {
+  render() {
+    return (
+      <li>Her name is, {this.props.name}
+        <button onClick={this.props.remove(this.props.id)}>Remove</button>
+      </li>
+    )
+  }
+}
+class App extends React.Component {
+    state = {
+      items: [
+        {id: 1, name: 'Naw Naw'},
+        {id: 2, name: 'Naw Aye'},
+      ]
+    }
+
+    add = () => {
+      let id = this.state.items.length + 1
+      let name = this.inputMore.current.value
+      this.setState({
+        items: [
+          ...this.state.items,
+          {id, name}
+        ]
+      })
+      this.inputMore.current.value = null
+    }
+
+    remove = id => () => { // Higher order function ကိုသုံးထားတာပါ
+      this.setState({
+        items: this.state.items.filter( n => id !== n.id)
+      })
+    }
+    inputMore = React.createRef();
+
+    render() {
+        return (
+            <div>
+                <h1>Hello World</h1>
+                <ul>
+                    {
+                      this.state.items.map( i => {
+                        return (
+                          <Item name={i.name} key={i.id} remove={this.remove} id={i.id} />
+                        )
+                      })
+                    }
+                </ul>
+                <input type="text" ref={this.inputMore}></input>
+                <button onClick={this.add}>Add</button>
+            </div>
+        )
+    }
 }
 
 export default App;
